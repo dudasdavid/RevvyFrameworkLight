@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/CustomRevvy.iml" filepath="$PROJECT_DIR$/.idea/CustomRevvy.iml" />
+      <module fileurl="file://file:C:/Users//C:/Users/david/Documents/CustomRevvy/.idea/CustomRevvy.iml" filepath="file:$PROJECT_DIR$/../../..//C:/Users/david/Documents/CustomRevvy/.idea/CustomRevvy.iml" />
+    </modules>
+  </component>
+</project>
