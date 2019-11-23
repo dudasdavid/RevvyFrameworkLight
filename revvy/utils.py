@@ -395,7 +395,7 @@ class RobotManager:
 
         # set up motors
         print("x"*10)
-        print(_robot.motors)
+        print(self._robot.motors)
         for motor in self._robot.motors:
             motor.configure(config.motors[motor.id])
             motor.on_status_changed(lambda p: live_service.update_motor(p.id, p.power, p.speed, p.position))
