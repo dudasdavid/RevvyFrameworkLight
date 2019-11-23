@@ -71,6 +71,8 @@ class DcMotorController:
         self._name = 'Motor {}'.format(port.id)
         self._port = port
 
+        print("*"*10)
+        print(port.id)
         self._configure = lambda cfg: port.interface.set_motor_port_config(port.id, cfg)
         self._read = lambda: port.interface.get_motor_position(port.id)
 
