@@ -394,6 +394,8 @@ class RobotManager:
         live_service = self._ble['live_message_service']
 
         # set up motors
+        print("x"*10)
+        print(_robot.motors)
         for motor in self._robot.motors:
             motor.configure(config.motors[motor.id])
             motor.on_status_changed(lambda p: live_service.update_motor(p.id, p.power, p.speed, p.position))

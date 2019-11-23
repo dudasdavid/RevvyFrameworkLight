@@ -1,5 +1,6 @@
 from revvy.hardware_dependent.rrrc_transport_i2c import RevvyTransportI2C
 from revvy.mcu.commands import *
+from revvy.robot.ports.motor import create_motor_port_handler
 
 class RevvyControl:
     def __init__(self, transport: RevvyTransport):
@@ -30,7 +31,7 @@ class RevvyControl:
         self.status_updater_control = McuStatusUpdater_ControlCommand(transport)
         self.status_updater_read = McuStatusUpdater_ReadCommand(transport)
 
-MotorParameters = {
+Motors = {
     'NotConfigured': {'driver': 'NotConfigured', 'config': {}},
     'RevvyMotor':    {
         'driver': 'DcMotor',
@@ -52,24 +53,13 @@ MotorParameters = {
     }
 }
 
-SensorParameters = {
+Sensors = {
     'NotConfigured': {'driver': 'NotConfigured', 'config': {}},
     'HC_SR04':       {'driver': 'HC_SR04', 'config': {}},
     'BumperSwitch':  {'driver': 'BumperSwitch', 'config': {}},
 }
 
-port_config = MotorParameters["RevvyMotor"]["config"]
 
-(posMin, posMax) = port_config['position_limits']
-(posP, posI, posD, speedLowerLimit, speedUpperLimit) = port_config['position_controller']
-(speedP, speedI, speedD, powerLowerLimit, powerUpperLimit) = port_config['speed_controller']
-
-config = list(struct.pack("<ll", posMin, posMax))
-config += list(struct.pack("<{}".format("f" * 5), posP, posI, posD, speedLowerLimit, speedUpperLimit))
-config += list(struct.pack("<{}".format("f" * 5), speedP, speedI, speedD, powerLowerLimit, powerUpperLimit))
-config += list(struct.pack("<h", port_config['encoder_resolution']))
-
-print(config)
 
 with RevvyTransportI2C() as transport:
     robot_control = RevvyControl(transport.bind(0x2D))
@@ -78,5 +68,6 @@ with RevvyTransportI2C() as transport:
     print(robot_control.get_motor_port_amount())
     print(robot_control.get_sensor_port_amount())
 
-    robot_control.set_motor_port_config(4, config)
-    robot_control.status_updater_control(3)
+    motorPorts = create_motor_port_handler(robot_control, Motors)
+
+
