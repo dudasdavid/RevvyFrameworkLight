@@ -54,14 +54,16 @@ SensorParameters = {
     'BumperSwitch':  {'driver': 'BumperSwitch', 'config': {}},
 }
 
-(posMin, posMax) = MotorParameters['position_limits']
-(posP, posI, posD, speedLowerLimit, speedUpperLimit) = MotorParameters['position_controller']
-(speedP, speedI, speedD, powerLowerLimit, powerUpperLimit) = MotorParameters['speed_controller']
+port_config = MotorParameters["RevvyMotor"]["config"]
+
+(posMin, posMax) = port_config['position_limits']
+(posP, posI, posD, speedLowerLimit, speedUpperLimit) = port_config['position_controller']
+(speedP, speedI, speedD, powerLowerLimit, powerUpperLimit) = port_config['speed_controller']
 
 config = list(struct.pack("<ll", posMin, posMax))
 config += list(struct.pack("<{}".format("f" * 5), posP, posI, posD, speedLowerLimit, speedUpperLimit))
 config += list(struct.pack("<{}".format("f" * 5), speedP, speedI, speedD, powerLowerLimit, powerUpperLimit))
-config += list(struct.pack("<h", MotorParameters['encoder_resolution']))
+config += list(struct.pack("<h", port_config['encoder_resolution']))
 
 
 with RevvyTransportI2C() as transport:
