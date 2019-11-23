@@ -129,6 +129,9 @@ class Robot:
             callback = None if config_name == 'NotConfigured' else sensor.update_status
             self._status_updater.set_slot(mcu_updater_slots["sensors"][sensor.id], callback)
 
+        print("!"*20)
+        print(Motors)
+
         self._motor_ports = create_motor_port_handler(interface, Motors)
         for port in self._motor_ports:
             port.on_config_changed(_motor_config_changed)
