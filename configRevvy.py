@@ -1,5 +1,6 @@
 from revvy.hardware_dependent.rrrc_transport_i2c import RevvyTransportI2C
 from revvy.mcu.commands import *
+import time
 from revvy.robot.ports.motor import create_motor_port_handler
 
 class RevvyControl:
@@ -27,9 +28,6 @@ class RevvyControl:
         self.set_sensor_port_config = SetSensorPortConfigCommand(transport)
         self.get_sensor_port_value = ReadSensorPortStatusCommand(transport)
 
-        self.status_updater_reset = McuStatusUpdater_ResetCommand(transport)
-        self.status_updater_control = McuStatusUpdater_ControlCommand(transport)
-        self.status_updater_read = McuStatusUpdater_ReadCommand(transport)
 
 Motors = {
     'NotConfigured': {'driver': 'NotConfigured', 'config': {}},
@@ -79,8 +77,10 @@ with RevvyTransportI2C() as transport:
     print(robot_control.get_motor_port_amount())
     print(robot_control.get_sensor_port_amount())
 
-    #motorPorts = create_motor_port_handler(robot_control, Motors)
 
     robot_control.set_motor_port_type(4,1)
     robot_control.set_motor_port_config(4, config)
-    robot_control.status_updater_control(4)
+
+    while True:
+        robot_control.ping()
+        time.sleep(0.02)
