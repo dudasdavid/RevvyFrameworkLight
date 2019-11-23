@@ -7,6 +7,8 @@ class RevvyControl:
     def __init__(self, transport: RevvyTransport):
         self.ping = PingCommand(transport)
 
+        self.set_master_status = SetMasterStatusCommand(transport)
+
         self.get_hardware_version = ReadHardwareVersionCommand(transport)
         self.get_firmware_version = ReadFirmwareVersionCommand(transport)
 
@@ -76,6 +78,8 @@ with RevvyTransportI2C() as transport:
     print(robot_control.get_firmware_version())
     print(robot_control.get_motor_port_amount())
     print(robot_control.get_sensor_port_amount())
+
+    robot_control.set_master_status(3)
 
 
     robot_control.set_motor_port_type(4,1)
