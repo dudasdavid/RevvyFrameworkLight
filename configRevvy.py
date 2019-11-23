@@ -26,6 +26,10 @@ class RevvyControl:
         self.set_sensor_port_config = SetSensorPortConfigCommand(transport)
         self.get_sensor_port_value = ReadSensorPortStatusCommand(transport)
 
+        self.status_updater_reset = McuStatusUpdater_ResetCommand(transport)
+        self.status_updater_control = McuStatusUpdater_ControlCommand(transport)
+        self.status_updater_read = McuStatusUpdater_ReadCommand(transport)
+
 MotorParameters = {
     'NotConfigured': {'driver': 'NotConfigured', 'config': {}},
     'RevvyMotor':    {
@@ -65,6 +69,7 @@ config += list(struct.pack("<{}".format("f" * 5), posP, posI, posD, speedLowerLi
 config += list(struct.pack("<{}".format("f" * 5), speedP, speedI, speedD, powerLowerLimit, powerUpperLimit))
 config += list(struct.pack("<h", port_config['encoder_resolution']))
 
+print(config)
 
 with RevvyTransportI2C() as transport:
     robot_control = RevvyControl(transport.bind(0x2D))
@@ -74,3 +79,4 @@ with RevvyTransportI2C() as transport:
     print(robot_control.get_sensor_port_amount())
 
     robot_control.set_motor_port_config(4, config)
+    robot_control.status_updater_control(3)
