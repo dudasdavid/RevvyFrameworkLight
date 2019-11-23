@@ -71,6 +71,8 @@ config += list(struct.pack("<h", port_config['encoder_resolution']))
 
 print(config)
 
+drivetrainMotors = [1,1,1,2,2,2] # set all to drivetrain LEFT = 1, RIGHT = 2
+
 with RevvyTransportI2C() as transport:
     robot_control = RevvyControl(transport.bind(0x2D))
 
@@ -78,11 +80,19 @@ with RevvyTransportI2C() as transport:
     print(robot_control.get_motor_port_amount())
     print(robot_control.get_sensor_port_amount())
 
-    robot_control.set_master_status(3)
+    robot_control.set_master_status(3) # Set master LED green and monitoring communication
 
 
-    robot_control.set_motor_port_type(4,1)
+    robot_control.set_motor_port_type(1,1) # 0 ='NotConfigured': NullMotor, 1 = 'DcMotor': DcMotorController
+    robot_control.set_motor_port_config(1, config)
+
+    robot_control.set_motor_port_type(4, 1)  # 0 ='NotConfigured': NullMotor, 1 = 'DcMotor': DcMotorController
     robot_control.set_motor_port_config(4, config)
+
+    robot_control.set_motor_port_type(5, 1)  # 0 ='NotConfigured': NullMotor, 1 = 'DcMotor': DcMotorController
+    robot_control.set_motor_port_config(5, config)
+
+    robot_control.configure_drivetrain(1, drivetrainMotors) # DIFFERENTIAL = 1
 
     while True:
         robot_control.ping()
