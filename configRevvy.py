@@ -26,7 +26,7 @@ class RevvyControl:
         self.set_sensor_port_config = SetSensorPortConfigCommand(transport)
         self.get_sensor_port_value = ReadSensorPortStatusCommand(transport)
 
-Motors = {
+MotorParameters = {
     'NotConfigured': {'driver': 'NotConfigured', 'config': {}},
     'RevvyMotor':    {
         'driver': 'DcMotor',
@@ -48,12 +48,20 @@ Motors = {
     }
 }
 
-Sensors = {
+SensorParameters = {
     'NotConfigured': {'driver': 'NotConfigured', 'config': {}},
     'HC_SR04':       {'driver': 'HC_SR04', 'config': {}},
     'BumperSwitch':  {'driver': 'BumperSwitch', 'config': {}},
 }
 
+(posMin, posMax) = MotorParameters['position_limits']
+(posP, posI, posD, speedLowerLimit, speedUpperLimit) = MotorParameters['position_controller']
+(speedP, speedI, speedD, powerLowerLimit, powerUpperLimit) = MotorParameters['speed_controller']
+
+config = list(struct.pack("<ll", posMin, posMax))
+config += list(struct.pack("<{}".format("f" * 5), posP, posI, posD, speedLowerLimit, speedUpperLimit))
+config += list(struct.pack("<{}".format("f" * 5), speedP, speedI, speedD, powerLowerLimit, powerUpperLimit))
+config += list(struct.pack("<h", MotorParameters['encoder_resolution']))
 
 
 with RevvyTransportI2C() as transport:
@@ -62,3 +70,5 @@ with RevvyTransportI2C() as transport:
     print(robot_control.get_firmware_version())
     print(robot_control.get_motor_port_amount())
     print(robot_control.get_sensor_port_amount())
+
+    robot_control.set_motor_port_config(4, config)
