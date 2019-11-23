@@ -56,6 +56,8 @@ class DifferentialDrivetrain:
         for motor in self._right_motors:
             motors[motor] = DifferentialDrivetrain.RIGHT
 
+        print("v"*10)
+        print(motors)
         self._interface.configure_drivetrain(DrivetrainTypes.DIFFERENTIAL, motors)
 
     @property
