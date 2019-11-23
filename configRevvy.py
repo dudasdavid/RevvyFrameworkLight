@@ -9,4 +9,4 @@ class RevvyControl:
 with RevvyTransportI2C() as transport:
     robot_control = RevvyControl(transport.bind(0x2D))
 
-    print robot_control.get_firmware_version()
+    print(robot_control.get_firmware_version())
