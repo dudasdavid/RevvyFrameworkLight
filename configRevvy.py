@@ -70,4 +70,5 @@ with RevvyTransportI2C() as transport:
 
     motorPorts = create_motor_port_handler(robot_control, Motors)
 
-
+    #robot_control.set_motor_port_config(4, config)
+    #robot_control.status_updater_control(4)

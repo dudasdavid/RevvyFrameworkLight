@@ -56,6 +56,8 @@ class PortHandler:
         new_driver_name = config['driver']
         print('PortInstance: Configuring port {} to {} ({})'.format(port.id, config_name, new_driver_name))
         self._set_port_type(port.id, self._types[new_driver_name])
+        print("z"*10)
+        print(self._types[new_driver_name])
         return self._drivers[new_driver_name](port, config['config'])
 
 
